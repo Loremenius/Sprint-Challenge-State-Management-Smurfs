@@ -1,16 +1,29 @@
 import React, { Component } from "react";
 import "./App.css";
+import { connect, useSelector } from "react-redux"
+import SmurfCard from "./SmurfCard"
+import { fetchSmurfs } from "../actions"
+import SmurfForm from "./SmurfForm";
 class App extends Component {
+
   render() {
+    console.log(this.props.smurfList);
     return (
       <div className="App">
         <h1>SMURFS! 2.0 W/ Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
+        <button onClick={this.props.fetchSmurfs}>Find Smurfs</button>
+        <SmurfForm/>
+        {this.props.smurfList.map((item)=>(
+          <SmurfCard {...item} key={item.id}/>
+        ))}
       </div>
     );
   }
 }
 
-export default App;
+function mapStateToProps(state){
+  return {
+    smurfList: state.smurfList
+  }
+}
+export default connect(mapStateToProps,{fetchSmurfs})(App);
